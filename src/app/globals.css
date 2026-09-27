@@ -1,0 +1,248 @@
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------------------
+   Raw palette.
+
+   One rule governs hue: warm belongs to time pressure and nothing else. A bid
+   closing tomorrow is the only thing on this site allowed to be red or amber,
+   so the brand accent stays cool and never competes with the deadline.
+
+   Every value below was measured, not eyeballed. Body text clears 4.5:1 on all
+   three surfaces it can land on; control borders and signal dots clear 3:1.
+   The dark ramp has its own values because the light signal reds disappear
+   against a dark slate.
+
+   Light and dark are declared twice on purpose: once for the system setting,
+   once for an explicit [data-theme] override, so a future toggle needs no
+   component changes. Edit the two dark blocks together.
+--------------------------------------------------------------------------- */
+
+:root {
+  color-scheme: light;
+
+  --surface: #edf0f3;
+  --surface-raised: #ffffff;
+  --surface-sunken: #e1e6eb;
+
+  --ink: #131c26;
+  --ink-muted: #55636f;
+
+  --hairline: #bcc7d2;
+  --border-strong: #6e7a85;
+
+  --accent: #0a5688;
+  --accent-hover: #08456e;
+  --accent-wash: #dde9f3;
+  --accent-ink: #ffffff;
+
+  --due-now: #b3251e;
+  --due-now-wash: #f7e2e0;
+  --due-soon: #8a4b00;
+  --due-soon-wash: #f4e7d2;
+
+  --pop: 0 10px 28px -10px rgb(19 28 38 / 0.28), 0 2px 6px -2px rgb(19 28 38 / 0.14);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+
+    --surface: #0e1620;
+    --surface-raised: #18232f;
+    --surface-sunken: #0a1119;
+
+    --ink: #e4eaf0;
+    --ink-muted: #98a6b4;
+
+    --hairline: #31404f;
+    --border-strong: #627790;
+
+    --accent: #7cb8ef;
+    --accent-hover: #9ccbf6;
+    --accent-wash: #17334a;
+    --accent-ink: #0e1620;
+
+    --due-now: #ff8d7c;
+    --due-now-wash: #3a1d1a;
+    --due-soon: #efa23f;
+    --due-soon-wash: #3a2a12;
+
+    --pop: 0 10px 28px -10px rgb(0 0 0 / 0.6), 0 2px 6px -2px rgb(0 0 0 / 0.4);
+  }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --surface: #0e1620;
+  --surface-raised: #18232f;
+  --surface-sunken: #0a1119;
+
+  --ink: #e4eaf0;
+  --ink-muted: #98a6b4;
+
+  --hairline: #31404f;
+  --border-strong: #627790;
+
+  --accent: #7cb8ef;
+  --accent-hover: #9ccbf6;
+  --accent-wash: #17334a;
+  --accent-ink: #0e1620;
+
+  --due-now: #ff8d7c;
+  --due-now-wash: #3a1d1a;
+  --due-soon: #efa23f;
+  --due-soon-wash: #3a2a12;
+
+  --pop: 0 10px 28px -10px rgb(0 0 0 / 0.6), 0 2px 6px -2px rgb(0 0 0 / 0.4);
+}
+
+/* ---------------------------------------------------------------------------
+   Semantic roles. Tailwind's stock palette is cleared so there is exactly one
+   vocabulary: no bg-zinc-50 drifting in beside bg-surface. If a component ever
+   needs a dark: utility, this layer failed and the fix belongs here.
+--------------------------------------------------------------------------- */
+
+@theme inline {
+  --color-*: initial;
+  --color-transparent: transparent;
+  --color-current: currentColor;
+  --color-inherit: inherit;
+  --color-white: #ffffff;
+  --color-black: #000000;
+
+  --color-surface: var(--surface);
+  --color-raised: var(--surface-raised);
+  --color-sunken: var(--surface-sunken);
+
+  --color-ink: var(--ink);
+  --color-muted: var(--ink-muted);
+
+  --color-hairline: var(--hairline);
+  --color-strong: var(--border-strong);
+
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-wash: var(--accent-wash);
+  --color-accent-ink: var(--accent-ink);
+
+  --color-due-now: var(--due-now);
+  --color-due-now-wash: var(--due-now-wash);
+  --color-due-soon: var(--due-soon);
+  --color-due-soon-wash: var(--due-soon-wash);
+
+  /* create-next-app aliases, kept so nothing renders unstyled mid migration */
+  --color-background: var(--surface);
+  --color-foreground: var(--ink);
+}
+
+@theme {
+  --font-*: initial;
+  --font-sans: var(--font-plex-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, "SF Mono", monospace;
+
+  /* Nothing drops below 12px and body sits at 15px: this gets read outdoors,
+     one handed, in bad light. Density comes from leading and spacing. */
+  --text-*: initial;
+  --text-micro: 0.75rem;
+  --text-micro--line-height: 1.125rem;
+  --text-micro--letter-spacing: 0.005em;
+  --text-meta: 0.8125rem;
+  --text-meta--line-height: 1.25rem;
+  --text-body: 0.9375rem;
+  --text-body--line-height: 1.5rem;
+  /* Inputs never drop below 1rem: iOS Safari zooms the whole page when a
+     focused field is smaller, which throws away a contractor's place in
+     the list. */
+  --text-input: 1rem;
+  --text-input--line-height: 1.5rem;
+  --text-title: 1.0625rem;
+  --text-title--line-height: 1.5rem;
+  --text-title--letter-spacing: -0.006em;
+  --text-h3: 1.25rem;
+  --text-h3--line-height: 1.625rem;
+  --text-h3--letter-spacing: -0.014em;
+  --text-h2: 1.5rem;
+  --text-h2--line-height: 1.875rem;
+  --text-h2--letter-spacing: -0.02em;
+  --text-h1: 2rem;
+  --text-h1--line-height: 2.25rem;
+  --text-h1--letter-spacing: -0.028em;
+
+  /* Tight and varied by element. A card and a badge sharing one radius is what
+     makes a page look assembled. */
+  --radius-*: initial;
+  --radius-xs: 0.125rem;
+  --radius-sm: 0.1875rem;
+  --radius-md: 0.3125rem;
+  --radius-lg: 0.5rem;
+  --radius-full: 9999px;
+
+  --shadow-*: initial;
+  --shadow-pop: var(--pop);
+
+  /* Fixed width of the deadline column, so a list of cards forms one vertical
+     rule of deadlines the eye can run down. */
+  /* Widened from 9.75rem when the deadline gained its time zone label: the
+     longest string went from ~133px to ~158px and every rail wrapped. */
+  --spacing-rail: 11rem;
+  --spacing-tap: 2.75rem;
+  /* Inline facet links in a dense list. Full 44px targets would add ~540px
+     down a page of results, which fights the density this list exists for.
+     24px clears the WCAG 2.5.8 AA floor. */
+  --spacing-facet-tap: 1.5rem;
+
+  --container-*: initial;
+  --container-shell: 60rem;
+  --container-field: 24rem;
+  --container-prose: 38rem;
+}
+
+/* ---------------------------------------------------------------------------
+   Surfaces the browser draws for us. Left at their defaults they belong to no
+   design system at all.
+--------------------------------------------------------------------------- */
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scrollbar-gutter: stable;
+    scrollbar-color: var(--border-strong) transparent;
+  }
+
+  body {
+    background-color: var(--surface);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-size: var(--text-body);
+    line-height: var(--text-body--line-height);
+  }
+
+  ::selection {
+    background-color: var(--accent-wash);
+    color: var(--ink);
+  }
+
+  input,
+  select,
+  textarea {
+    caret-color: var(--accent);
+  }
+
+  a {
+    text-underline-offset: 0.2em;
+    text-decoration-thickness: from-font;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: var(--radius-xs);
+  }
+
+  /* Deadlines are compared down a column, so their digits must share a width. */
+  [data-numeric] {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum" 1;
+  }
+}

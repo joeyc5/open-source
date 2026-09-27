@@ -1,0 +1,42 @@
+name: ingest
+
+on:
+  # Uncomment once SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are set as
+  # repository secrets. 09:00 UTC is 02:00 Pacific in summer, 01:00 in winter.
+  # schedule:
+  #   - cron: '0 9 * * *'
+  workflow_dispatch:
+    inputs:
+      source:
+        description: 'Single adapter key to run (blank runs all)'
+        required: false
+        default: ''
+
+concurrency:
+  group: ingest
+  cancel-in-progress: false
+
+jobs:
+  ingest:
+    runs-on: ubuntu-latest
+    # The SAM bulk CSV is roughly 245 MB and Cal eProcure needs a real browser,
+    # so ingest runs here rather than in a Vercel function.
+    timeout-minutes: 60
+    env:
+      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - name: Run ingest
+        run: |
+          if [ -n "${{ inputs.source }}" ]; then
+            npm run ingest -- --source "${{ inputs.source }}"
+          else
+            npm run ingest
+          fi
