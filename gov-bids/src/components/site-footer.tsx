@@ -20,6 +20,12 @@ export function SiteFooter() {
           <p className="mt-3 text-body text-muted">
             Search federal and California government bids without an account.
           </p>
+          <p className="mt-3 text-meta text-muted">
+            © 2026 Joey Childs Media. All Rights Reserved.{' '}
+            <a href="https://www.joeychildsmedia.com" className="text-accent hover:underline">
+              joeychildsmedia.com
+            </a>
+          </p>
         </div>
 
         <nav aria-labelledby="footer-sources">

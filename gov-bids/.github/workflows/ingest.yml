@@ -1,10 +1,9 @@
 name: ingest
 
 on:
-  # Uncomment once SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are set as
-  # repository secrets. 09:00 UTC is 02:00 Pacific in summer, 01:00 in winter.
-  # schedule:
-  #   - cron: '0 9 * * *'
+  schedule:
+    # 09:00 UTC, which is 02:00 Pacific in summer and 01:00 in winter.
+    - cron: '0 9 * * *'
   workflow_dispatch:
     inputs:
       source:
